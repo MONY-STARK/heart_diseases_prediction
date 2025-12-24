@@ -5,6 +5,7 @@ from pathlib import Path
 from app import app, load_model # adjust if your app path differs
 
 
+
 @pytest.fixture(scope="session")
 def client():
     return TestClient(app)

@@ -11,7 +11,7 @@ from base_model.preprocessing import preprocess_data
 
 app = FastAPI(title="Heart Disease Prediction")
 
-templates = Jinja2Templates(directory="/home/stark/Documents/Ai_project/heart_diseases_prediction/application/templates/")
+templates = Jinja2Templates(directory="application/templates/")
 
 # Load model
 def load_model(path="saved_models/base_logistic_model.pkl"):
