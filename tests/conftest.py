@@ -2,7 +2,7 @@ import pytest
 import joblib
 from fastapi.testclient import TestClient
 from pathlib import Path
-from app import app  # adjust if your app path differs
+from app import app, load_model # adjust if your app path differs
 
 
 @pytest.fixture(scope="session")
@@ -12,9 +12,7 @@ def client():
 
 @pytest.fixture(scope="session")
 def model():
-    model_path = Path("saved_models/base_logistic_model.pkl")
-    assert model_path.exists(), "Model file missing"
-    return joblib.load(model_path)["model"]
+    return load_model("saved_models/base_logistic_model.pkl")
 
 
 @pytest.fixture

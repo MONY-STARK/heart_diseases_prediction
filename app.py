@@ -13,7 +13,8 @@ app = FastAPI(title="Heart Disease Prediction")
 templates = Jinja2Templates(directory="/home/stark/Documents/Ai_project/heart_diseases_prediction/application/templates/")
 
 # Load model
-model = joblib.load("saved_models/base_logistic_model.pkl")["model"]
+def load_model(path="saved_models/base_logistic_model.pkl"):
+    return joblib.load(path)["model"]
 
 FEATURES = [
     "male", "age", "currentSmoker", "cigsPerDay", "BPMeds",
@@ -62,6 +63,8 @@ async def predict_form(
     "glucose": glucose
     }])
 
+    model = load_model()
+
     pred = model.predict(X)[0]
     prob = model.predict_proba(X)[0][1]
 
@@ -89,6 +92,7 @@ async def predict_file(file: UploadFile = File(...)):
             "error": "CSV schema mismatch",
             "missing": list(set(FEATURES) - set(df.columns))
         }
+    model = load_model()
 
     df["Prediction"] = model.predict(X)
     df["Risk_Probability"] = (model.predict_proba(X)[:, 1] * 100).round(2)
