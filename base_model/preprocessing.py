@@ -33,8 +33,8 @@ def split_data(dataframe):
     y = dataframe["TenYearCHD"]
     x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 
-    x_test.to_csv("X_test.csv", index = False)
-    y_test.to_csv("y_test.csv", index = False)
+    # x_test.to_csv("X_test.csv", index = False)
+    # y_test.to_csv("y_test.csv", index = False)
 
     return x_train, x_test, y_train,y_test
 
