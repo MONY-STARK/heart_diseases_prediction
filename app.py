@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Request, UploadFile, File, Form
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
+from base_model.model import LogisticRegressionModel
 import pandas as pd
 import numpy as np
 import joblib
@@ -10,11 +11,12 @@ from pathlib import Path
 from base_model.preprocessing import preprocess_data
 
 app = FastAPI(title="Heart Disease Prediction")
+logisticregmodel = LogisticRegressionModel()
 
 templates = Jinja2Templates(directory="application/templates/")
 
 # Load model
-def load_model(path="saved_models/base_logistic_model.pkl"):
+def load_model(path=f"saved_models/{logisticregmodel.version}/model.pkl"):
     return joblib.load(path)["model"]
 
 FEATURES = [
