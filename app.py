@@ -1,23 +1,24 @@
 from fastapi import FastAPI, Request, UploadFile, File, Form
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
-from models.LogisticRegression import LogisticRegressionModel
 import pandas as pd
-import numpy as np
 import joblib
+from models.base_model import BaseModel
 
-from pathlib import Path
+# from pathlib import Path
 
-from models.preprocessing import preprocess_data
+# from models.preprocessing import build_pipeline
 
 app = FastAPI(title="Heart Disease Prediction")
-logisticregmodel = LogisticRegressionModel()
+base_model = BaseModel()
+model = joblib.load(f"saved_models/{base_model.model_version}/model.joblib")
 
 templates = Jinja2Templates(directory="application/templates/")
 
-# Load model
-def load_model(path=f"saved_models/{logisticregmodel.version}/model.pkl"):
-    return joblib.load(path)["model"]
+
+#Load model
+def load_model(path=f"saved_models/{base_model.model_version}/model.joblib"):
+    return joblib.load(path)
 
 FEATURES = [
     "male", "age", "currentSmoker", "cigsPerDay", "BPMeds",
@@ -66,8 +67,6 @@ async def predict_form(
     "glucose": glucose
     }])
 
-    model = load_model()
-
     pred = model.predict(X)[0]
     prob = model.predict_proba(X)[0][1]
 
@@ -95,7 +94,6 @@ async def predict_file(file: UploadFile = File(...)):
             "error": "CSV schema mismatch",
             "missing": list(set(FEATURES) - set(df.columns))
         }
-    model = load_model()
 
     df["Prediction"] = model.predict(X)
     df["Risk_Probability"] = (model.predict_proba(X)[:, 1] * 100).round(2)

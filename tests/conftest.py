@@ -1,11 +1,10 @@
 import pytest
-import joblib
 from fastapi.testclient import TestClient
-from pathlib import Path
 from app import app, load_model # adjust if your app path differ
+from models.base_model import BaseModel
 
-version = "1.0.0"
-
+base_model = BaseModel()
+version = base_model.model_version
 
 
 @pytest.fixture(scope="session")
@@ -15,7 +14,7 @@ def client():
 
 @pytest.fixture(scope="session")
 def model():
-    return load_model(f"saved_models/{version}/model.pkl")
+    return load_model(f"saved_models/{version}/model.joblib")
 
 
 @pytest.fixture
