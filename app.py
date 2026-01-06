@@ -1,14 +1,14 @@
 from fastapi import FastAPI, Request, UploadFile, File, Form
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
-from base_model.model import LogisticRegressionModel
+from models.LogisticRegression import LogisticRegressionModel
 import pandas as pd
 import numpy as np
 import joblib
 
 from pathlib import Path
 
-from base_model.preprocessing import preprocess_data
+from models.preprocessing import preprocess_data
 
 app = FastAPI(title="Heart Disease Prediction")
 logisticregmodel = LogisticRegressionModel()
