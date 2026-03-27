@@ -6,15 +6,15 @@ from pathlib import Path
 import joblib
 from sklearn.model_selection import train_test_split
 import pandas as pd
-import pickle
+
 
 
 
 class LogisticRegressionModel(BaseModel):
 
-    def __init__(self, data:pd.DataFrame):
+    def __init__(self, data:pd.DataFrame, train = True):
         super().__init__()
-
+        self.want_train = train
         self.model = LogisticRegression(max_iter=1000, 
                                         class_weight="balanced")  
         self.data = pd.read_csv(data)
@@ -36,13 +36,14 @@ class LogisticRegressionModel(BaseModel):
         )
 
     def train(self):
-        self.x_train, self.x_test, self.y_train, self.y_test = self.__split_data()
-        
-        model = build_pipeline(self.model)
-        model.fit(self.x_train, self.y_train)
+        if self.want_train:
+            self.x_train, self.x_test, self.y_train, self.y_test = self.__split_data()
+            
+            model = build_pipeline(self.model)
+            model.fit(self.x_train, self.y_train)
 
-        print("----- Model Training Done -----")
-        self.save_artifact(model)
+            print("----- Model Training Done -----")
+            self.save_artifact(model)
 
     def save_artifact(self, model, model_path = None):
 
